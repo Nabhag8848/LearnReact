@@ -1,3 +1,22 @@
+const skillList = [
+  {
+    name: "Faith",
+    color: "red",
+  },
+  {
+    name: "Hd Wallpapers",
+    color: "blue",
+  },
+  {
+    name: "Bible Images",
+    color: "yellow",
+  },
+  {
+    name: "Travel Images",
+    color: "green",
+  },
+];
+
 function App() {
   return (
     <center>
@@ -18,18 +37,17 @@ function Avatar() {
 function SkillList() {
   return (
     <div className="data skill-list">
-      <Skill name="Faith" color="red" />
-      <Skill name="Hd Wallpapers " color="blue" />
-      <Skill name="Bible Images" color="yellow" />
-      <Skill name="Travel Images" color="green" />
+      {skillList.map((s) => (
+        <Skill name={s.name} color={s.color}></Skill>
+      ))}
     </div>
   );
 }
 
-function Skill(props) {
+function Skill({color, name}) {
   return (
-    <span className="skill" style={{ backgroundColor: props.color }}>
-      {props.name}
+    <span className="skill" style={{ backgroundColor: color }}>
+      {name}
     </span>
   );
 }
