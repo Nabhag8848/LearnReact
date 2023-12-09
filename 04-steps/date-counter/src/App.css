@@ -1,0 +1,27 @@
+.App {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.main {
+  border-style: outset;
+  border-color: rgb(0, 0, 0);
+  padding: 50px 50px;
+}
+
+button {
+  background-color: #d55387; /* Green */
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+}
+
+p {
+  font-weight: bold;
+  font-size: large;
+}
