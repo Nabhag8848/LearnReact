@@ -11,28 +11,24 @@ export default function App() {
 function Step() {
   const [step, setStep] = useState(1);
 
-  function handleDecrement() {
-    if (step > 1) setStep((step) => step - 1);
-  }
-
-  function handleIncrement() {
-    setStep((step) => step + 1);
-  }
-
   return (
-    <div class="main">
+    <div className="main">
       <div className="buttons">
-        <button onClick={handleDecrement}>Decrease</button>
-        <p> Step : {step} </p>
-        <button onClick={handleIncrement}>Increase</button>
+        <input
+          type="range"
+          min={1}
+          max={10}
+          value={step}
+          onChange={(e) => setStep(Number(e.target.value))}
+        ></input>
+        <p> {step} </p>
       </div>
-      <br />
-      <ChangingView step={step} />
+      <ChangingView step={step} setStep={setStep} />
     </div>
   );
 }
 
-function ChangingView({ step }) {
+function ChangingView({ step, setStep }) {
   const [count, setCount] = useState(0);
 
   function handleDecrement() {
@@ -46,7 +42,16 @@ function ChangingView({ step }) {
     <div>
       <div className="buttons">
         <button onClick={handleDecrement}>Decrease</button>
-        <p> Count : {count} </p>
+        <input
+          value={count}
+          onChange={(e) => {
+            if (e.target.value === "") {
+              setCount(0);
+              return;
+            }
+            setCount(Number(e.target.value));
+          }}
+        ></input>
         <button onClick={handleIncrement}>Increase</button>
       </div>
       <p>
@@ -56,6 +61,17 @@ function ChangingView({ step }) {
           ? `Today`
           : `${count} days from now`}
       </p>
+
+      {(count !== 0 || step !== 1) && (
+        <button
+          onClick={() => {
+            setCount(0);
+            setStep(1);
+          }}
+        >
+          Reset
+        </button>
+      )}
     </div>
   );
 }
