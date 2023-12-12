@@ -24,7 +24,7 @@ export default function Friend({ friends, openId, onSelect }) {
               onSelect(eventId, openId);
             }}
           >
-            {openId == friend.id ? `Close` : `Select`}
+            {openId === friend.id ? `Close` : `Select`}
           </button>
         </li>
       ))}
