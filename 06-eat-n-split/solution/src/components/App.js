@@ -70,7 +70,12 @@ export default function App() {
         onSelect={handleSelect}
         openId={openId}
       />
-      <SplitBill id={openId} friends={friends} onSplit={handleSplit} />
+      <SplitBill
+        id={openId}
+        friends={friends}
+        onSplit={handleSplit}
+        key={openId}
+      />
     </div>
   );
 }
