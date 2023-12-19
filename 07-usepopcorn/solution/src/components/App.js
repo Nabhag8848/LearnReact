@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import NavBar from "./NavBar";
 import Logo from "./Logo";
 import Search from "./Search";
@@ -11,17 +11,16 @@ import ErrorMessage from "./ErrorMessage";
 import MovieDetails from "./MovieDetails";
 import WatchedSummary from "./WatchedSummary";
 import WatchedMovieList from "./WatchedMovieList";
+import { useMovies } from "../hooks/useMovies";
+import { useLocalStorageState } from "../hooks/useLocalStorageState";
 
 export const KEY = "3f2487b9";
 
-
 export default function App() {
-  const [movies, setMovies] = useState([]);
-  const [watched, setWatched] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
   const [query, setQuery] = useState("");
-  const [selectedId, setSelectedId] = useState(null);
+  const { movies, error, isLoading, selectedId, setSelectedId } =
+    useMovies(query);
+  const [watched, setWatched] = useLocalStorageState([], "watched");
 
   function handleSelectMovie(id) {
     setSelectedId(id === selectedId ? null : id);
@@ -40,56 +39,11 @@ export default function App() {
     setWatched((movies) => movies.filter((movie) => movie.imdbID !== id));
   }
 
-  useEffect(
-    function () {
-      const controller = new AbortController();
-
-      async function fetchMovies() {
-        try {
-          setIsLoading(true);
-          setError("");
-          const res = await fetch(
-            `http://www.omdbapi.com/?apikey=${KEY}&s=${query}`,
-            { signal: controller.signal }
-          );
-
-          if (!res.ok) {
-            throw new Error("Something went wrong while fetching movies");
-          }
-
-          const data = await res.json();
-          if (data.Response === "False") {
-            throw new Error(data.Error);
-          }
-          setMovies(data.Search);
-          setError("");
-        } catch (err) {
-          if (err.name === "AbortError") return;
-          setError(err.message);
-        } finally {
-          setIsLoading(false);
-        }
-      }
-      if (query.trim().length < 3) {
-        setMovies([]);
-        setError("");
-        return;
-      }
-      handleCloseMovie();
-      fetchMovies();
-
-      return function () {
-        controller.abort();
-      };
-    },
-    [query]
-  );
-
   return (
     <>
       <NavBar>
         <Logo />
-        <Search query={query} setQuery={setQuery} />
+        <Search query={query} setQuery={setQuery} onClear={handleCloseMovie} />
         <NumResults movies={movies} />
       </NavBar>
       <Main>
