@@ -68,11 +68,4 @@ input:focus {
   border-radius: 5px;
 }
 
-/*
-"importCSSModule": {
-    "prefix": "csm",
-    "scope": "javascript,typescript,javascriptreact",
-    "body": ["import styles from './${TM_FILENAME_BASE}.module.css'"],
-    "description": "Import CSS Module as `styles`"
-  },
-*/
+
