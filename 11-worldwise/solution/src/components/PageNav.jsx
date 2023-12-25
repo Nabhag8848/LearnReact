@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import styles from "./PageNav.module.css";
 import Logo from "./Logo";
-export default function PageNav() {
+export default function PageNav({ isLogin = false }) {
   return (
     <nav className={styles.nav}>
       <Logo />
@@ -12,9 +12,13 @@ export default function PageNav() {
         <li>
           <NavLink to="/product">Product</NavLink>
         </li>
-        <li>
-          <NavLink to="/login" className={styles.ctaLink}>Login</NavLink>
-        </li>
+        {!isLogin && (
+          <li>
+            <NavLink to="/login" className={styles.ctaLink}>
+              Login
+            </NavLink>
+          </li>
+        )}
       </ul>
     </nav>
   );
