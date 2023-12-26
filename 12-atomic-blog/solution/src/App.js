@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { faker } from "@faker-js/faker";
 import { PostProvider, usePosts } from "./PostContext";
+import { SearchPostProvider, useSearchPost } from "./SearchPostContext";
 
 function createRandomPost() {
   return {
@@ -28,12 +29,14 @@ function App() {
       >
         {isFakeDark ? "☀️" : "🌙"}
       </button>
-      <PostProvider>
-        <Header />
-        <Main />
-        <Archive />
-        <Footer />
-      </PostProvider>
+      <SearchPostProvider>
+        <PostProvider>
+          <Header />
+          <Main />
+          <Archive />
+          <Footer />
+        </PostProvider>
+      </SearchPostProvider>
     </section>
   );
 }
@@ -56,7 +59,7 @@ function Header() {
 }
 
 function SearchPosts() {
-  const { searchQuery, setSearchQuery } = usePosts();
+  const { searchQuery, setSearchQuery } = useSearchPost();
   return (
     <input
       value={searchQuery}
