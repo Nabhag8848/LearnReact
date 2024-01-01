@@ -1,6 +1,6 @@
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
-function EmptyCart() {
+export default function EmptyCart() {
   return (
     <div>
       <Link to="/menu">&larr; Back to menu</Link>
@@ -9,5 +9,3 @@ function EmptyCart() {
     </div>
   );
 }
-
-export default EmptyCart;

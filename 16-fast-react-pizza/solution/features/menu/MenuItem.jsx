@@ -1,4 +1,6 @@
-function MenuItem({ pizza }) {
+import { formatCurrency } from "../../utils/helpers";
+
+export default function MenuItem({ pizza }) {
   const { id, name, unitPrice, ingredients, soldOut, imageUrl } = pizza;
 
   return (
@@ -6,7 +8,7 @@ function MenuItem({ pizza }) {
       <img src={imageUrl} alt={name} />
       <div>
         <p>{name}</p>
-        <p>{ingredients.join(', ')}</p>
+        <p>{ingredients.join(", ")}</p>
         <div>
           {!soldOut ? <p>{formatCurrency(unitPrice)}</p> : <p>Sold out</p>}
         </div>
@@ -14,5 +16,3 @@ function MenuItem({ pizza }) {
     </li>
   );
 }
-
-export default MenuItem;
