@@ -6,12 +6,12 @@ function Button({ children, disabled, to, type }) {
   focus:ring-offset-1 disabled:cursor-not-allowed`;
 
   const styles = {
-    primary: base + ` px-4 py-3 text-base`,
+    primary: base + ` px-4 py-3 text-sm`,
     small: base + ` px-3 py-2 text-xs`,
     secondary: `rounded-lg border-2 border-zinc-200 font-semibold uppercase 
     tracking-wide hover:text-zinc-600 hover:border-zinc-400 transition-all duration-100
     focus:outline-none focus:ring-2 focus:ring-zinc-400 focus:ring-offset-1 
-    disabled:cursor-not-allowed px-3 py-2 text-base`,
+    disabled:cursor-not-allowed px-4 py-[8.5px] text-sm`,
   };
 
   if (to) {

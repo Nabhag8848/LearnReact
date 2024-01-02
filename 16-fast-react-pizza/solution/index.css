@@ -6,7 +6,7 @@
   .input {
     @apply rounded-lg border border-zinc-500 px-2 py-1 text-lg 
     transition-all duration-100 focus:outline-none focus:ring 
-    focus:ring-zinc-300 md:w-full;
+    focus:ring-zinc-300;
   }
 
   .loader {
