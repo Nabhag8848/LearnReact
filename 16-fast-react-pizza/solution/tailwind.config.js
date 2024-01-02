@@ -7,7 +7,14 @@ export default {
     "./ui/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    fontFamily:{
+      sans: "Inter, monospace"
+    },
+    extend: {
+      height: {
+        screen: "100dvh"
+      }
+    },
   },
   plugins: [],
 };

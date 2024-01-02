@@ -2,14 +2,14 @@ import CreateUser from "../features/user/CreateUser";
 
 export default function Home() {
   return (
-    <div className="mt-36 text-center mb-14">
+    <div className="mb-14 mt-36 text-center sm:mb-28 sm:mt-40">
       <h1
-        className="mb-10 text-center font-mono text-3xl font-semibold
-      text-red-500"
+        className="mb-10 text-center font-sans text-5xl font-semibold text-red-500
+      md:text-6xl "
       >
-        The best pizza.
+        La Minoz 🍕
         <br />
-        Straight out of the oven, straight to you.
+        Fresh out of the Oven, Straight to You! 🚀
       </h1>
       <CreateUser />
     </div>
