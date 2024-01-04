@@ -14,11 +14,11 @@ export default function Home() {
       )}
       <h1
         className={`mb-10 text-center font-sans text-5xl font-semibold text-red-500
-      md:text-6xl ${username && "mt-6"}`}
+      md:text-6xl ${username && "mt-6"} `}
       >
         La Minoz 🍕
         <br />
-        Fresh out of the Oven, Straight to You! 🚀
+        Fresh out of the Oven, Straight to You!
       </h1>
       {!username && <CreateUser />}
     </div>
