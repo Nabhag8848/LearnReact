@@ -49,8 +49,8 @@ const variations = {
 };
 
 interface ButtonProps {
-  variation: "primary" | "secondary" | "danger";
-  size: "small" | "medium" | "large";
+  variation?: "primary" | "secondary" | "danger";
+  size?: "small" | "medium" | "large";
 }
 
 const Button = styled.button<ButtonProps>`

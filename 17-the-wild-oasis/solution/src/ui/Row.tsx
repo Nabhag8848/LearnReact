@@ -1,7 +1,7 @@
 import styled, { css } from "styled-components";
 
 interface RowProps {
-  readonly type: "horizontal" | "vertical";
+  readonly type?: "horizontal" | "vertical";
 }
 
 const Row = styled.div<RowProps>`
