@@ -26,7 +26,7 @@ function CreateCabinForm() {
     onError: (err) => toast.error(err.message),
   });
   function onSubmit(data) {
-    mutate(data);
+    mutate({ ...data, image: data.image[0] });
   }
 
   function onError(errors) {
@@ -96,7 +96,6 @@ function CreateCabinForm() {
         error={errors?.description?.message}
       >
         <Textarea
-          type="number"
           id="description"
           defaultValue=""
           {...register("description", { required: "This field is Required!" })}
@@ -105,7 +104,12 @@ function CreateCabinForm() {
       </FormRow>
 
       <FormRow label="Cabin photo" error="">
-        <FileInput id="image" accept="image/*" disabled={isCreating} />
+        <FileInput
+          id="image"
+          accept="image/*"
+          disabled={isCreating}
+          {...register("image", { required: "This field is Required!" })}
+        />
       </FormRow>
 
       <FormRow label="" error="">
