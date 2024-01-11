@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { RxCross2 } from "react-icons/rx";
 import { createPortal } from "react-dom";
+import { cloneElement, createContext, useContext, useState } from "react";
+import { useOutSideClick } from "../hooks/useOutsideClick";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -51,18 +53,45 @@ const Button = styled.button`
   }
 `;
 
-function Modal({ children, onClose }) {
+const ModalContext = createContext();
+
+function Modal({ children }) {
+  const [openName, setOpenName] = useState("");
+  const close = () => setOpenName("");
+  const open = setOpenName;
+
+  return (
+    <ModalContext.Provider value={{ open, close, openName }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function Open({ children, open: openWindowName }) {
+  const { open } = useContext(ModalContext);
+
+  return cloneElement(children, { onClick: () => open(openWindowName) });
+}
+
+function Window({ children, name }) {
+  const { openName, close } = useContext(ModalContext);
+  const ref = useOutSideClick(close);
+  if (openName !== name) return null;
+
   return createPortal(
     <Overlay>
-      <StyledModal>
-        <Button>
-          <RxCross2 onClick={onClose} />
+      <StyledModal ref={ref}>
+        <Button onClick={close}>
+          <RxCross2 />
         </Button>
-        {children}
+        {cloneElement(children, { onCloseModal: close })}
       </StyledModal>
     </Overlay>,
     document.body
   );
 }
+
+Modal.Open = Open;
+Modal.Window = Window;
 
 export default Modal;
