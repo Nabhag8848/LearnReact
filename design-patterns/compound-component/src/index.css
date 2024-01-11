@@ -1,0 +1,26 @@
+body {
+  font-family: "Courier New", Courier, monospace;
+  font-weight: 900;
+}
+
+center {
+  margin-top: 33vh;
+}
+
+label {
+  font-size: 100px;
+}
+
+span { 
+  margin-left: 20px;
+  margin-right: 20px;
+  font-size: 20px;
+}
+
+button {
+  padding: 10px 40px;
+  background-color: #f5455c;
+  color: #fff;
+  border: none;
+  border-radius: 5%;
+}
