@@ -1,4 +1,6 @@
 import styled from "styled-components";
+import { RxCross2 } from "react-icons/rx";
+import { createPortal } from "react-dom";
 
 const StyledModal = styled.div`
   position: fixed;
@@ -48,3 +50,19 @@ const Button = styled.button`
     color: var(--color-grey-500);
   }
 `;
+
+function Modal({ children, onClose }) {
+  return createPortal(
+    <Overlay>
+      <StyledModal>
+        <Button>
+          <RxCross2 onClick={onClose} />
+        </Button>
+        {children}
+      </StyledModal>
+    </Overlay>,
+    document.body
+  );
+}
+
+export default Modal;
