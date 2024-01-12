@@ -8,13 +8,6 @@ import { bookings } from "./data-bookings";
 import { cabins } from "./data-cabins";
 import { guests } from "./data-guests";
 
-// const originalSettings = {
-//   minBookingLength: 3,
-//   maxBookingLength: 30,
-//   maxGuestsPerBooking: 10,
-//   breakfastPrice: 15,
-// };
-
 async function deleteGuests() {
   const { error } = await supabase.from("guests").delete().gt("id", 0);
   if (error) console.log(error.message);
@@ -55,46 +48,42 @@ async function createBookings() {
 
   const finalBookings = bookings.map((booking) => {
     // Here relying on the order of cabins, as they don't have and ID yet
-    const cabin = cabins.at(booking.cabinId - 1);
-    const numNights = subtractDates(booking.endDate, booking.startDate);
-    const cabinPrice = numNights * (cabin.regularPrice - cabin.discount);
-    const extrasPrice = booking.hasBreakfast
-      ? numNights * 15 * booking.numGuests
+    const cabin = cabins.find((e) => e.id === booking.cabin_id);
+    const numNights = subtractDates(booking.end_date, booking.start_date);
+    const cabinPrice = numNights * (cabin.regular_price - cabin.discount);
+    const extrasPrice = booking.has_breakfast
+      ? numNights * 15 * booking.num_guests
       : 0; // hardcoded breakfast price
     const totalPrice = cabinPrice + extrasPrice;
 
     let status;
     if (
-      isPast(new Date(booking.endDate)) &&
-      !isToday(new Date(booking.endDate))
+      isPast(new Date(booking.end_date)) &&
+      !isToday(new Date(booking.end_date))
     )
       status = "checked-out";
     if (
-      isFuture(new Date(booking.startDate)) ||
-      isToday(new Date(booking.startDate))
+      isFuture(new Date(booking.start_date)) ||
+      isToday(new Date(booking.start_date))
     )
       status = "unconfirmed";
     if (
-      (isFuture(new Date(booking.endDate)) ||
-        isToday(new Date(booking.endDate))) &&
-      isPast(new Date(booking.startDate)) &&
-      !isToday(new Date(booking.startDate))
+      (isFuture(new Date(booking.end_date)) ||
+        isToday(new Date(booking.end_date))) &&
+      isPast(new Date(booking.start_date)) &&
+      !isToday(new Date(booking.start_date))
     )
       status = "checked-in";
 
     return {
       ...booking,
-      numNights,
-      cabinPrice,
-      extrasPrice,
-      totalPrice,
-      guestId: allGuestIds.at(booking.guestId - 1),
-      cabinId: allCabinIds.at(booking.cabinId - 1),
+      num_nights: numNights,
+      cabin_price: cabinPrice,
+      extra_price: extrasPrice,
+      total_price: totalPrice,
       status,
     };
   });
-
-  console.log(finalBookings);
 
   const { error } = await supabase.from("bookings").insert(finalBookings);
   if (error) console.log(error.message);
@@ -105,15 +94,11 @@ function Uploader() {
 
   async function uploadAll() {
     setIsLoading(true);
-    // Bookings need to be deleted FIRST
-    await deleteBookings();
     await deleteGuests();
     await deleteCabins();
 
-    // Bookings need to be created LAST
     await createGuests();
     await createCabins();
-    await createBookings();
 
     setIsLoading(false);
   }
@@ -141,11 +126,11 @@ function Uploader() {
       <h3>SAMPLE DATA</h3>
 
       <Button onClick={uploadAll} disabled={isLoading}>
-        Upload ALL
+        Upload Guests and Cabins
       </Button>
 
       <Button onClick={uploadBookings} disabled={isLoading}>
-        Upload bookings ONLY
+        Upload Bookings ONLY
       </Button>
     </div>
   );
