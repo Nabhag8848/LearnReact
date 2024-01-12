@@ -5,7 +5,6 @@ export function useOutSideClick(close, listenCapturing = true) {
   useEffect(function () {
     function handleClick(e) {
       if (ref.current && !ref.current.contains(e.target)) {
-        console.log("click");
         close();
       }
     }
