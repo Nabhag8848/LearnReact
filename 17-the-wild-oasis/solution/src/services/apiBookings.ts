@@ -1,10 +1,11 @@
+import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
-export async function getBookings(filter, sortBy) {
+export async function getBookings(filter, sortBy, currPage = {}) {
   let query = supabase
     .from("bookings")
-    .select("*, cabins(name), guests(full_name, email)");
+    .select("*, cabins(name), guests(full_name, email)", { count: "exact" });
 
   if (filter) query = query.eq(filter.field, filter.value);
 
@@ -13,14 +14,21 @@ export async function getBookings(filter, sortBy) {
       ascending: sortBy.value === "asc" ? true : false,
     });
 
-  const { data, error } = await query;
+  if (currPage) {
+    const from = (currPage - 1) * PAGE_SIZE;
+    const to = from + PAGE_SIZE - 1;
+
+    query = query.range(from, to);
+  }
+
+  const { data, error, count } = await query;
 
   if (error) {
     console.error(error);
     throw new Error("Booking could not be loaded");
   }
 
-  return data;
+  return { count, data };
 }
 
 export async function getBooking(id) {
