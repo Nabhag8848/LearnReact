@@ -14,6 +14,7 @@ import Checkbox from "../../ui/Checkbox";
 import { useEffect, useState } from "react";
 import { formatCurrency } from "../../utils/helpers";
 import { useCheckin } from "./useCheckin";
+import { useSettings } from "../settings/useSettings";
 
 const Box = styled.div`
   /* Box */
@@ -27,7 +28,9 @@ function CheckinBooking() {
   const moveBack = useMoveBack();
   const { booking, isLoading } = useBooking();
   const [confirmPaid, setConfirmPaid] = useState(false);
+  const [addBreakfast, setAddBreakfast] = useState(false);
   const { isCheckin, checkIn } = useCheckin();
+  const { isLoading: isSettingLoading, settings } = useSettings();
 
   useEffect(
     function () {
@@ -36,7 +39,7 @@ function CheckinBooking() {
     [booking]
   );
 
-  if (isLoading) return <Spinner />;
+  if (isLoading || isSettingLoading) return <Spinner />;
 
   const {
     id: bookingId,
@@ -47,9 +50,26 @@ function CheckinBooking() {
     num_nights,
   } = booking;
 
+  const extraPrice = settings.breakfast_price * num_guests * num_nights;
+
   function handleCheckin() {
     if (!confirmPaid) return;
-    checkIn(bookingId);
+    if (addBreakfast) {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      checkIn({
+        bookingId,
+        breakfast: {
+          has_breakfast: true,
+          extra_price: extraPrice,
+          total_price: total_price + extraPrice,
+        },
+      });
+    } else {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-expect-error
+      checkIn({ bookingId, breakfast: {} });
+    }
   }
 
   return (
@@ -60,6 +80,21 @@ function CheckinBooking() {
       </Row>
 
       <BookingDataBox booking={booking} />
+      {!has_breakfast && (
+        <Box>
+          <Checkbox
+            checked={addBreakfast}
+            onChange={() => {
+              setAddBreakfast((add) => !add);
+              setConfirmPaid(false);
+            }}
+            disabled={isSettingLoading}
+            id={crypto.randomUUID()}
+          >
+            Want to add breakfast of {formatCurrency(extraPrice)} ?
+          </Checkbox>
+        </Box>
+      )}
       <Box>
         <Checkbox
           checked={confirmPaid}
@@ -68,7 +103,11 @@ function CheckinBooking() {
           id={bookingId}
         >
           I Confirm that {guests.full_name} has paid total amount of{" "}
-          {formatCurrency(total_price)}
+          {!addBreakfast
+            ? formatCurrency(total_price)
+            : `${formatCurrency(total_price + extraPrice)} (${formatCurrency(
+                total_price
+              )} +  ${formatCurrency(extraPrice)})`}
         </Checkbox>
       </Box>
       <ButtonGroup>
