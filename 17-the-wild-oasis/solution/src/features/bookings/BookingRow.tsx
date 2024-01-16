@@ -6,6 +6,9 @@ import Table from "../../ui/Table";
 
 import { formatCurrency } from "../../utils/helpers";
 import { formatDistanceFromNow } from "../../utils/helpers";
+import Menus from "../../ui/Menus";
+import { HiArrowDownOnSquare, HiEye } from "react-icons/hi2";
+import { useNavigate } from "react-router-dom";
 
 const Cabin = styled.div`
   font-size: 1.6rem;
@@ -48,6 +51,7 @@ function BookingRow({
     cabins: { name: cabin_name },
   },
 }) {
+  const navigate = useNavigate();
   const statusToTagName = {
     unconfirmed: "blue",
     "checked-in": "green",
@@ -55,31 +59,52 @@ function BookingRow({
   };
 
   return (
-    <Table.Row>
-      <Cabin>{cabin_name}</Cabin>
+    <Menus>
+      <Table.Row>
+        <Cabin>{cabin_name}</Cabin>
 
-      <Stacked>
-        <span>{guest_name}</span>
-        <span>{email}</span>
-      </Stacked>
+        <Stacked>
+          <span>{guest_name}</span>
+          <span>{email}</span>
+        </Stacked>
 
-      <Stacked>
-        <span>
-          {isToday(new Date(start_date))
-            ? "Today"
-            : formatDistanceFromNow(start_date)}
-          &rarr; {num_nights} night stay
-        </span>
-        <span>
-          {format(new Date(start_date), "MMM dd yyyy")} &mdash;
-          {format(new Date(end_date), "MMM dd yyyy")}
-        </span>
-      </Stacked>
+        <Stacked>
+          <span>
+            {isToday(new Date(start_date))
+              ? "Today"
+              : formatDistanceFromNow(start_date)}
+            &rarr; {num_nights} night stay
+          </span>
+          <span>
+            {format(new Date(start_date), "MMM dd yyyy")} &mdash;
+            {format(new Date(end_date), "MMM dd yyyy")}
+          </span>
+        </Stacked>
 
-      <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
+        <Tag type={statusToTagName[status]}>{status.replace("-", " ")}</Tag>
 
-      <Amount>{formatCurrency(total_price)}</Amount>
-    </Table.Row>
+        <Amount>{formatCurrency(total_price)}</Amount>
+        <Menus.Menu>
+          <Menus.Toggle id={bookingId} />
+          <Menus.List id={bookingId}>
+            <Menus.Button
+              icon={<HiEye />}
+              onClick={() => navigate(`/bookings/${bookingId}`)}
+            >
+              See Details
+            </Menus.Button>
+            {status === "unconfirmed" && (
+              <Menus.Button
+                icon={<HiArrowDownOnSquare />}
+                onClick={() => navigate(`/checkin/${bookingId}`)}
+              >
+                Check in
+              </Menus.Button>
+            )}
+          </Menus.List>
+        </Menus.Menu>
+      </Table.Row>
+    </Menus>
   );
 }
 
