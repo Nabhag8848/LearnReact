@@ -20,6 +20,14 @@ const Heading = styled.h1`
       font-weight: 500;
     `}
 
+     ${(props) =>
+    props.as === "h4" &&
+    css`
+      font-size: 2.5rem;
+      font-weight: 500;
+      text-align: center;
+    `}
+
   line-height: 1.4;
 `;
 
