@@ -12,7 +12,15 @@ function SignupForm() {
   const { errors } = formState;
   const { signUp, isSignUp } = useSignup();
 
-  function onSubmit({ full_name, password, email }) {
+  function onSubmit({
+    full_name,
+    password,
+    email,
+  }: {
+    full_name?: string;
+    password?: string;
+    email?: string;
+  }) {
     signUp(
       { full_name, password, email },
       {
@@ -24,7 +32,7 @@ function SignupForm() {
   }
   return (
     <Form onSubmit={handleSubmit(onSubmit)}>
-      <FormRow label="Full name" error={errors?.full_name?.message}>
+      <FormRow label="Full name" error={errors?.full_name?.message as string}>
         <Input
           type="text"
           id="full_name"
@@ -33,7 +41,7 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow label="Email address" error={errors?.email?.message}>
+      <FormRow label="Email address" error={errors?.email?.message as string}>
         <Input
           type="email"
           id="email"
@@ -50,7 +58,7 @@ function SignupForm() {
 
       <FormRow
         label="Password (min 8 characters)"
-        error={errors?.password?.message}
+        error={errors?.password?.message as string}
       >
         <Input
           type="password"
@@ -66,7 +74,10 @@ function SignupForm() {
         />
       </FormRow>
 
-      <FormRow label="Repeat password" error={errors?.passwordConfirm?.message}>
+      <FormRow
+        label="Repeat password"
+        error={errors?.passwordConfirm?.message as string}
+      >
         <Input
           type="password"
           id="passwordConfirm"

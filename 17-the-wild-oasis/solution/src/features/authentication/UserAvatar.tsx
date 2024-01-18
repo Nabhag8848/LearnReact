@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useUser } from "./useUser";
+import { User } from "@supabase/supabase-js";
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -23,7 +24,7 @@ const Avatar = styled.img`
 
 function UserAvatar() {
   const { user } = useUser();
-  const { full_name, avatar } = user?.user_metadata;
+  const { full_name, avatar } = (user as User).user_metadata;
   return (
     <StyledUserAvatar>
       <Avatar

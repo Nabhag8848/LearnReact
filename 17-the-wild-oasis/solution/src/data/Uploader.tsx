@@ -34,22 +34,11 @@ async function createCabins() {
 }
 
 async function createBookings() {
-  // Bookings need a guestId and a cabinId. We can't tell Supabase IDs for each object, it will calculate them on its own. So it might be different for different people, especially after multiple uploads. Therefore, we need to first get all guestIds and cabinIds, and then replace the original IDs in the booking data with the actual ones from the DB
-  const { data: guestsIds } = await supabase
-    .from("guests")
-    .select("id")
-    .order("id");
-  const allGuestIds = guestsIds.map((cabin) => cabin.id);
-  const { data: cabinsIds } = await supabase
-    .from("cabins")
-    .select("id")
-    .order("id");
-  const allCabinIds = cabinsIds.map((cabin) => cabin.id);
-
   const finalBookings = bookings.map((booking) => {
     // Here relying on the order of cabins, as they don't have and ID yet
     const cabin = cabins.find((e) => e.id === booking.cabin_id);
     const numNights = subtractDates(booking.end_date, booking.start_date);
+    if (!cabin) throw new Error("No Cabins");
     const cabinPrice = numNights * (cabin.regular_price - cabin.discount);
     const extrasPrice = booking.has_breakfast
       ? numNights * 15 * booking.num_guests

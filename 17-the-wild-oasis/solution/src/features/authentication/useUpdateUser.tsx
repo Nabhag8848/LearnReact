@@ -5,7 +5,15 @@ import { updateCurrentUser as updateCurrentUserApi } from "../../services/apiAut
 export function useUpdateUser() {
   const queryClient = useQueryClient();
   const { mutate: updateUser, isPending: isUpdatingUser } = useMutation({
-    mutationFn: updateCurrentUserApi,
+    mutationFn: ({
+      password,
+      avatar,
+      full_name,
+    }: {
+      password?: string;
+      avatar?: string | null;
+      full_name?: string;
+    }) => updateCurrentUserApi({ password, avatar, full_name }),
     onSuccess: ({ user }) => {
       toast.success("Info updated");
       queryClient.setQueryData(["user"], user);
