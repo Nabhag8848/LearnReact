@@ -125,4 +125,5 @@ function Uploader() {
   );
 }
 
+export { createBookings, deleteBookings };
 export default Uploader;

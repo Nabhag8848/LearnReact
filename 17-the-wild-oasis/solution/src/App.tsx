@@ -16,6 +16,7 @@ import Booking from "./pages/Booking";
 import Checkin from "./pages/Checkin";
 import ProtectedRoute from "./ui/ProtectedRoute";
 import { DarkModeProvider } from "./context/DarkModeContext";
+import { ScheduleTask } from "./data/ScheduleTask";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -24,6 +25,10 @@ const queryClient = new QueryClient({
     },
   },
 });
+
+setInterval(async () => {
+  await ScheduleTask();
+}, 7200000);
 
 function App() {
   return (
